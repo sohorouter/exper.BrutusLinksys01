@@ -123,8 +123,10 @@ test_passwd(char *base64_txt, const char *ip)
 	}
 
 
-	if ( strstr(header, "<TITLE>401 Unauthorized</TITLE>") != NULL )
-		return -1;
+        // WGR614 returns lower case html
+	if (( strstr(header, "<TITLE>401 Unauthorized</TITLE>") != NULL ) ||
+                ( strstr(header, "<title>401 Unauthorized</title>") != NULL ) ) 
+            return -1;
 
 
 	printf("\n** connect router <192.168.1.1> successfull\n");
@@ -151,11 +153,14 @@ type_router_check(const char *ip)
 		return -1;
 	}
 	
-	if ( strstr(header, "realm=\"WRT54G\"") == NULL ) {
-		printf("header value error ...\n");
-		free(header);
-		return -1;
-	}
+        // don't test this
+        if(0){
+            if ( strstr(header, "realm=\"WRT54G\"") == NULL ) {
+                printf("header value error ...\n");
+                free(header);
+                return -1;
+            }
+        }
 
 	printf("\n** router linksys WRT54G detected\n");
 
